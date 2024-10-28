@@ -4,6 +4,20 @@
 
 I got tired of manually downloading models from HuggingFace using git-lfs, authenticating every time, waiting for that finish, and then FINALLY manually inputting the model source and destination into a Python script, and then wait for THAT to finish inside of a Docker container before moving onto the next one and starting the process all over again.
 
+As a result, I wrote these two scripts to download models from HuggingFace, convert them, pull all .json files from the original repo, and then insert a block of text into the model card (see below) before finally uploading everything to HuggingFace.
+
+Original repo is here: (RKLLM)[https://github.com/airockchip/rknn-llm]
+Initial testing was done using Pelochus' EZ RKNN-LLM container found in this repo: (ezrknn-llm)[https://github.com/Pelochus/ezrknn-llm/]
+
+For more information, and useful links, please check out the (RockchipNPU subreddit)[https://reddit.com/r/RockchipNPU]
+
+Conversion tests done on consumer grade hardware:
+
+- AMD Ryzen 3 1200 Quad-Core Processor
+- GA-AX370-Gaming K5 Motherboard
+- 2 x G.SKILL Ripjaws V Series DDR4 RAM 32GB, 64GB total
+- NVIDIA GeForce GTX 780 (not used in this experiment)
+
 ## How to use
 
 There are two scripts in here - an interactive, and a non-interactive version. I have also included version 1.1.0 of RKLLM-Toolkit, since it contains all of the dependencies required to run these scripts (except for inquirer.)
@@ -38,6 +52,10 @@ Save your changes, and then run the following from the root of the repo director
 cd docker-noninteractive
 docker build -t $(whoami)/rkllm-noninteractive . && docker run -it $(whoami)/rkllm-noninteractive
 ```
+
+This version of the script performs one large upload - after all conversion is done.
+
+## Changing the model card template
 
 Of course, feel free to adjust the model card template under the HubHelpers class, which is available in both:
 
@@ -78,6 +96,8 @@ Of course, feel free to adjust the model card template under the HubHelpers clas
             c.close()
 ```
 
+## Resources
+
 Model conversion utilizes anywhere from 2-4x the size of the original model, which means that you need an equal amount of memory. I compensated for this with swap files of varying size. Since I just leave the process running overnight (I have low upload speeds,) the performance hit from using swap files vs partitions doesn't bother me much. If performance is critical, I would recommend at least 512GB of DDR4 RAM with a lot of cores to handle especially large models.
 
 Based on my comparisons of the APIs, these scripts should also be compatible with RKLLM v1.1.1 and Python 3.10. I just haven't tested them yet.
@@ -89,16 +109,3 @@ To do:
 - Test with LoRA
 - Test with multimodal models (currently only converted txt2txt)
 - Update to use the newer version of RKLLM, 1.1.1 (most likely after 0.9.8 of the kernel driver is in Armbian)
-
-Original repo is here: (RKLLM)[https://github.com/airockchip/rknn-llm]
-Initial testing was done using Pelochus' EZ RKNN-LLM container found in this repo: (ezrknn-llm)[https://github.com/Pelochus/ezrknn-llm/]
-
-For more information, and useful links, please check out the (RockchipNPU subreddit)[https://reddit.com/r/RockchipNPU]
-
-Conversion tests done on consumer grade hardware:
-
-- AMD Ryzen 3 1200 Quad-Core Processor
-- GA-AX370-Gaming K5 Motherboard
-- 2 x G.SKILL Ripjaws V Series DDR4 RAM 32GB, 64GB total
-- NVIDIA GeForce GTX 780 (not used in this experiment)
-
