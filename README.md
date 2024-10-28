@@ -96,7 +96,7 @@ Of course, feel free to adjust the model card template under the HubHelpers clas
             c.close()
 ```
 
-## Resources
+## Utilization
 
 Model conversion utilizes anywhere from 2-4x the size of the original model, which means that you need an equal amount of memory. I compensated for this with swap files of varying size. Since I just leave the process running overnight (I have low upload speeds,) the performance hit from using swap files vs partitions doesn't bother me much. If performance is critical, I would recommend at least 512GB of DDR4 RAM with a lot of cores to handle especially large models.
 
