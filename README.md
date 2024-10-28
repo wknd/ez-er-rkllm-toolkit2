@@ -25,14 +25,14 @@ There are two scripts in here - an interactive, and a non-interactive version. I
 To get started, clone this repository:
 
 ```bash
-git clone https://github.com/c0zaut/ez-er-rkllm/
+git clone https://github.com/c0zaut/ez-er-rkllm.git
 ```
 
 To do a one-shot conversion in an interactive shell:
 
 ```bash
 cd docker-interactive
-docker build -t $(whoami)/rkllm-interactive . && docker run -it $(whoami)/rkllm-interactive
+docker build -t $(whoami)/rkllm-interactive . && docker run -it --rm $(whoami)/rkllm-interactive
 ```
 
 To do a batch of various models, quant types, with or without optimization mode, and a range of hybrid quant ratios, you will need to edit non_interactive.py by setting the models, qtypes, optimizations, and hybrid quant ratio lists. 
@@ -50,7 +50,7 @@ Save your changes, and then run the following from the root of the repo director
 
 ```bash
 cd docker-noninteractive
-docker build -t $(whoami)/rkllm-noninteractive . && docker run -it $(whoami)/rkllm-noninteractive
+docker build -t $(whoami)/rkllm-noninteractive . && docker run -it --rm $(whoami)/rkllm-noninteractive
 ```
 
 This version of the script performs one large upload - after all conversion is done.
