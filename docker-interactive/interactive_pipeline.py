@@ -260,11 +260,11 @@ class HubHelpers:
             f'This version of {self.model_name} has been converted to run on the {self.platform.upper()} NPU using {self.qtype} quantization.\n\n' + \
             f'This model has been optimized with the following LoRA: {self.lora_id}\n\n' + \
             f'Compatible with RKLLM version: {self.rkllm_version}\n\n' + \
-            f'Useful links:\n' + \
-            f'(Official RKLLM GitHub)[https://github.com/airockchip/rknn-llm)\n' + \
-            f'(RockhipNPU Reddit)[https://reddit.com/r/RockchipNPU]\n' + \
-            f'(EZRKNN-LLM)[https://github.com/Pelochus/ezrknn-llm/]\n' + \
-            f'Pretty much anything by these folks: (marty1885)[https://github.com/marty1885] and (happyme531)[https://huggingface.co/happyme531]\n' + \
+            f'###Useful links:\n' + \
+            f'[Official RKLLM GitHub](https://github.com/airockchip/rknn-llm) \n\n' + \
+            f'[RockhipNPU Reddit](https://reddit.com/r/RockchipNPU) \n\n' + \
+            f'[EZRKNN-LLM](https://github.com/Pelochus/ezrknn-llm/) \n\n' + \
+            f'Pretty much anything by these folks: [marty1885][https://github.com/marty1885] and [happyme531](https://huggingface.co/happyme531) \n\n' + \
             f'# Original Model Card for base model, {self.model_name}, below:\n\n' + \
             f'{self.card_in.text}'
         try:
