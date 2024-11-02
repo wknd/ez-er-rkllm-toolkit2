@@ -19,6 +19,8 @@ Conversion tests done on consumer grade hardware:
 - 2 x G.SKILL Ripjaws V Series DDR4 RAM 32GB, 64GB total
 - NVIDIA GeForce GTX 780 (not used in this experiment)
 
+Also performed conversion using an Intel X5650 CPU, which uses DDR3 RAM and does not support AVX.
+
 ## How to use
 
 There are two scripts in here - an interactive, and a non-interactive version. I have also included version 1.1.0 of RKLLM-Toolkit, since it contains all of the dependencies required to run these scripts (except for inquirer.)
