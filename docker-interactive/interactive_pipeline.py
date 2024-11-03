@@ -311,7 +311,7 @@ if __name__ == "__main__":
     rk.user_inputs()
     rk.build_vars()
     hf = HubHelpers(platform=rk.platform, model_id=rk.model_id, lora_id=rk.lora_id, 
-                    qtypes=rk.qtype, rkllm_version=rk.rkllm_version)
+                    qtype=rk.qtype, rkllm_version=rk.rkllm_version)
     hf.login_to_hf()
     hf.repo_check(rk.model_id)
 
