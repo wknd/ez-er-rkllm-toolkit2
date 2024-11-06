@@ -216,7 +216,7 @@ class HubHelpers:
             f'[Official RKLLM GitHub](https://github.com/airockchip/rknn-llm) \n\n' + \
             f'[RockhipNPU Reddit](https://reddit.com/r/RockchipNPU) \n\n' + \
             f'[EZRKNN-LLM](https://github.com/Pelochus/ezrknn-llm/) \n\n' + \
-            f'Pretty much anything by these folks: [marty1885][https://github.com/marty1885] and [happyme531](https://huggingface.co/happyme531) \n\n' + \
+            f'Pretty much anything by these folks: (marty1885)[https://github.com/marty1885] and [happyme531](https://huggingface.co/happyme531) \n\n' + \
             f'# Original Model Card for base model, {self.model_name}, below:\n\n' + \
             f'{self.card_in.text}'
         try:
