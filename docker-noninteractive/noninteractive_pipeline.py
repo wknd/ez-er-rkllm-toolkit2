@@ -193,8 +193,10 @@ class HubHelpers:
         except Exception as e:
             print(f"Login failed: {e}\nGated models will be inaccessible, and you \
                   will not be able to upload to HuggingFace.")
+        else:
+            print("Logged into HuggingFace!\n")
         self.hf_username = whoami(self.hf_token)["name"]
-        return self.hf_username
+        print(self.hf_username + "\n")
             
     def build_card(self, export_path):
         """
@@ -253,9 +255,10 @@ class HubHelpers:
         print(f"Uploading files to repo")
         try:
             self.commit_info = self.hf_api.upload_folder(repo_id=self.repo_id, folder_path=export_path)
+            print(self.commit_info)
         except:
             print(f"Upload to {self.repo_url} failed!")
-        return self.commit_info
+        
 
 if __name__ == "__main__":
 
@@ -309,6 +312,7 @@ if __name__ == "__main__":
                         print(f"Model conversion failed: {e}")
 
         try:
+            hf.login_to_hf()
             hf.upload_to_repo(model=rk.model_name, import_path=rk.model_dir, export_path=rk.export_path)
         except:
             print(f"Upload failed for {rk.export_path}!")
