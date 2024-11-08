@@ -301,7 +301,7 @@ class HubHelpers:
             shutil.copy2(json, self.export_path)
             print(f"Copied {json}\n")
         tokenizer = Path(import_path + "tokenizer.model")
-        if os.path.exists(tokenizer):
+        if tokenizer.exists() == True:
             print(f"Copying {tokenizer}")
             shutil.copy2(tokenizer, self.export_path)
         else:
