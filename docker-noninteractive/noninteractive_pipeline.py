@@ -310,6 +310,7 @@ if __name__ == "__main__":
                     rk.build_vars()
                     hf = HubHelpers(platform=rk.platform, model_id=model, lora_id=rk.lora_id, 
                         qtype=qtypes, rkllm_version=rk.rkllm_version)
+                    hf.login_to_hf()
                     hf.repo_check(rk.model_id)
                     try:
                         rk.remote_pipeline_to_local()
