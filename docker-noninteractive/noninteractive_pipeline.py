@@ -191,12 +191,12 @@ class HubHelpers:
         try:
             login(token=self.hf_token)
         except Exception as e:
-            print(f"Login failed: {e}\nGated models will be inaccessible, and you \
-                  will not be able to upload to HuggingFace.")
+            print(f"Login failed: {e}\nGated models will be inaccessible, and you " + \
+                  "will not be able to upload to HuggingFace.")
         else:
-            print("Logged into HuggingFace!\n")
+            print("Logged into HuggingFace!")
         self.hf_username = whoami(self.hf_token)["name"]
-        print(self.hf_username + "\n")
+        print(self.hf_username)
             
     def build_card(self, export_path):
         """
@@ -272,7 +272,7 @@ if __name__ == "__main__":
     Provide a list of model_ids (Huggingface - user/model format)
     model_ids = {"THUDM/chatglm3-6b", "THUDM/chatglm3-6b-32k", "THUDM/chatglm3-6b-128k"}
     """
-    model_ids = {"", "", "", ""}
+    model_ids = ["", "", "", ""]
     """
     Provide a list of quantization types
     rk3588 compatible qtypes:
@@ -286,18 +286,18 @@ if __name__ == "__main__":
     Configuring loops and conditionals within the class's domain causing the entire program
     to exit
     """
-    qtypes = {"", "", ""}
+    qtypes = ["", "", ""]
     """
     Hybrid quant ratio, a float between 0.0 and 1.0. Initialized as strings because
     float 0.0 usually winds up being cast to "None"
     hybrid_rates = {"0.0", "0.5", "1.0"}
     """
-    hybrid_rates = {"", "", ""}
+    hybrid_rates = ["", "", ""]
     """
     Whether to use optimization. It's an integer, but really should be a boolean.
     Set as strings here to prevent "None" casting.
     """
-    optimizations = {"0", "1"}
+    optimizations = ["0", "1"]
 
     platform = "rk3588"
 
@@ -310,18 +310,13 @@ if __name__ == "__main__":
                     rk.build_vars()
                     hf = HubHelpers(platform=rk.platform, model_id=model, lora_id=rk.lora_id, 
                         qtype=qtypes, rkllm_version=rk.rkllm_version)
-                    hf.login_to_hf()
                     hf.repo_check(rk.model_id)
                     try:
                         rk.remote_pipeline_to_local()
                     except RuntimeError as e:
                         print(f"Model conversion failed: {e}")
 
-        try:
-            hf.login_to_hf()
-            hf.upload_to_repo(model=rk.model_name, import_path=rk.model_dir, export_path=rk.export_path)
-        except:
-            print(f"Upload failed for {rk.export_path}!")
-        else:
-            print("Okay, these models are really big!")
-            rk.cleanup_models("./models")
+
+        hf.upload_to_repo(model=rk.model_name, import_path=rk.model_dir, export_path=rk.export_path)
+        print("Okay, these models are really big!")
+        rk.cleanup_models("./models")

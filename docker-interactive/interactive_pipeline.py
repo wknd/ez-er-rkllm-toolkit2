@@ -239,8 +239,8 @@ class HubHelpers:
         try:
             login(token=self.hf_token)
         except Exception as e:
-            print(f"Login failed: {e}\nGated models will be inaccessible, and you \
-                  will not be able to upload to HuggingFace.")
+            print(f"Login failed: {e}\nGated models will be inaccessible, and you " + \
+                  "will not be able to upload to HuggingFace.")
         else:
             print("Logged into HuggingFace!\n")
             self.hf_username = whoami(self.hf_token)["name"]
