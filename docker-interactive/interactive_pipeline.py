@@ -300,9 +300,16 @@ class HubHelpers:
         for json in self.import_path.rglob("*.json"):
             shutil.copy2(json, self.export_path)
             print(f"Copied {json}\n")
+        tokenizer = Path(import_path + "tokenizer.model")
+        if os.path.exists(tokenizer):
+            print(f"Copying {tokenizer}")
+            shutil.copy2(tokenizer, self.export_path)
+        else:
+            print(f"No such file as {tokenizer}!")
+
         print(f"Uploading files to repo")
         try:
-            self.commit_info = self.hf_api.upload_folder(repo_id=self.repo_id, folder_path=export_path)
+            self.commit_info = self.hf_api.upload_folder(repo_id=self.repo_id, folder_path=self.export_path)
             print(self.commit_info)
         except:
             print(f"Upload to {self.repo_url} failed!")
