@@ -120,7 +120,7 @@ class RKLLMRemotePipeline:
             self.lora_dir = f"./models/{self.lora_name}/"
             self.export_name = f"{self.model_name}-{self.lora_name}-{self.name_suffix}"
             self.export_path = f"./models/{self.model_name}-{self.lora_name}-{self.platform}/"
-        self.rkllm_version = "1.1.1"
+        self.rkllm_version = "1.1.2"
 
     def remote_pipeline_to_local(self):
         '''
@@ -266,7 +266,8 @@ class HubHelpers:
             f'[Official RKLLM GitHub](https://github.com/airockchip/rknn-llm) \n\n' + \
             f'[RockhipNPU Reddit](https://reddit.com/r/RockchipNPU) \n\n' + \
             f'[EZRKNN-LLM](https://github.com/Pelochus/ezrknn-llm/) \n\n' + \
-            f'Pretty much anything by these folks: [marty1885][https://github.com/marty1885] and [happyme531](https://huggingface.co/happyme531) \n\n' + \
+            f'Pretty much anything by these folks: [marty1885](https://github.com/marty1885) and [happyme531](https://huggingface.co/happyme531) \n\n' + \
+            f'Converted using https://github.com/c0zaut/ez-er-rkllm-toolkit \n\n' + \
             f'# Original Model Card for base model, {self.model_name}, below:\n\n' + \
             f'{self.card_in.text}'
         try:
@@ -297,22 +298,11 @@ class HubHelpers:
         self.build_card(export_path)
         self.import_path = Path(import_path)
         self.export_path = Path(export_path)
-        for json in self.import_path.rglob("*.json"):
-            shutil.copy2(json, self.export_path)
-            print(f"Copied {json}\n")
-        tokenizer = Path(import_path + "tokenizer.model")
-        if tokenizer.exists() == True:
-            print(f"Copying {tokenizer}")
-            shutil.copy2(tokenizer, self.export_path)
-        else:
-            print(f"No such file as {tokenizer}!")
-
         print(f"Uploading files to repo")
-        try:
-            self.commit_info = self.hf_api.upload_folder(repo_id=self.repo_id, folder_path=self.export_path)
-            print(self.commit_info)
-        except:
-            print(f"Upload to {self.repo_url} failed!")
+        shutil.copytree(self.import_path, self.export_path, ignore=shutil.ignore_patterns('*.safetensors', '*.pt*', '*.bin', '*.gguf', 'README*'), 
+                        copy_function=shutil.copy2, dirs_exist_ok=True)
+        self.commit_info = self.hf_api.upload_folder(repo_id=self.repo_id, folder_path=self.export_path)
+        print(self.commit_info)
 
 if __name__ == "__main__":
 
@@ -329,10 +319,7 @@ if __name__ == "__main__":
     except RuntimeError as e:
         print(f"Model conversion failed: {e}")
     
-    try:
-        hf.upload_to_repo(model=rk.model_name, import_path=rk.model_dir, export_path=rk.export_path)
-    except:
-        print(f"Upload failed for {rk.export_path}!")
-    else:
-        print("Okay, these models are really big!")
-        rk.cleanup_models("./models")
+
+    hf.upload_to_repo(model=rk.model_name, import_path=rk.model_dir, export_path=rk.export_path)
+    print("Okay, these models are really big!")
+    rk.cleanup_models("./models")
