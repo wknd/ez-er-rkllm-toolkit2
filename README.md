@@ -33,9 +33,15 @@ git clone https://github.com/heathershaw821/ez-er-rkllm.git
 
 To do a one-shot conversion in an interactive shell:
 
+**CPU**
 ```bash
 cd docker
 docker build -t $(whoami)/rkllm-interactive . && docker run -it --rm $(whoami)/rkllm-interactive
+```
+**GPU**
+```bash
+cd docker
+docker build -t $(whoami)/rkllm-interactive . && docker run -it --gpus all --rm $(whoami)/rkllm-interactive
 ```
 
 
