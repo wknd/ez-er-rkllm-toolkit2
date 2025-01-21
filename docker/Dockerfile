@@ -1,4 +1,4 @@
-FROM ubuntu:22.04
+FROM nvidia/cuda:12.4.1-devel-ubuntu22.04
 
 SHELL ["/bin/bash", "-exo", "pipefail", "-c"]
 
@@ -7,7 +7,7 @@ RUN echo 'APT::Install-Suggests "0";' >> /etc/apt/apt.conf.d/00-docker \
 
 RUN DEBIAN_FRONTEND=noninteractive \
   apt-get update \
-  && apt-get install -y python3 pip python3-tk \
+  && DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get install -y python3 pip python3-tk \
   && rm -rf /var/lib/apt/lists/* \
   && mkdir /root/wheels \
   && mkdir -p /root/toolkit/models

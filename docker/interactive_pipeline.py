@@ -105,7 +105,7 @@ class RKLLMRemotePipeline:
             self.npu_cores = 2
         self.dataset = None
         self.qparams = None
-        self.device = "cpu"
+        self.device = "cuda"
         self.model_name = self.model_id.split("/", 1)[1]
         self.model_dir = f"./models/{self.model_name}/"
         self.name_suffix = f"{self.platform}-{self.qtype}-opt-{self.optimization}-hybrid-ratio-{self.hybrid_rate}"
