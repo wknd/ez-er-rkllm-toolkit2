@@ -1,4 +1,4 @@
-# EZ-ER-RKLLM-Toolkit
+# EZ-ER-RKLLM-Toolkit2
 
 ## Backstory
 
@@ -28,35 +28,16 @@ There are two scripts in here - an interactive, and a non-interactive version. I
 To get started, clone this repository:
 
 ```bash
-git clone https://github.com/c0zaut/ez-er-rkllm.git
+git clone https://github.com/heathershaw821/ez-er-rkllm.git
 ```
 
 To do a one-shot conversion in an interactive shell:
 
 ```bash
-cd docker-interactive
+cd docker
 docker build -t $(whoami)/rkllm-interactive . && docker run -it --rm $(whoami)/rkllm-interactive
 ```
 
-To do a batch of various models, quant types, with or without optimization mode, and a range of hybrid quant ratios, you will need to edit non_interactive.py by setting the models, qtypes, optimizations, and hybrid quant ratio lists. 
-
-For example, to convert all three versions of chatglm3-6b (8K, 32K, and 128K context windows) with and without optimization, using w8a8 and w8a8_g128 quantizations with hybrid ratios of 0.0, 0.5, and 1.0:
-
-```python
-    model_ids = {"THUDM/chatglm3-6b", "THUDM/chatglm3-6b-32k", "THUDM/chatglm3-6b-128k"}
-    qtypes = {"w8a8", "w8a8_g128"}
-    hybrid_rates = {"0.0", "0.5", "1.0"}
-    optimizations = {"0", "1"}
-```
-
-Save your changes, and then run the following from the root of the repo directory:
-
-```bash
-cd docker-noninteractive
-docker build -t $(whoami)/rkllm-noninteractive . && docker run -it --rm $(whoami)/rkllm-noninteractive
-```
-
-This version of the script performs one large upload - after all conversion is done.
 
 ## Changing the model card template
 
