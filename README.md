@@ -58,6 +58,16 @@ cd docker
 docker build -t $(whoami)/rkllm-interactive --build-arg BASE_IMAGE=nvidia/cuda:12.4.1-devel-ubuntu22.04 . && docker run -it --gpus all --rm $(whoami)/rkllm-interactive
 ```
 
+### Caching
+
+You may want to store the downloaded models, or the generated files, or both.
+
+To do so mount a folder to `/root/toolkit/models` in the container, and when asked in the interactive script, tell it not to cleanup the files.
+
+```bash
+docker run -it --gpus all --volume ./.cache:/root/toolkit/models --rm $(whoami)/rkllm-interactive
+```
+
 ## Changing the model card template
 
 Of course, feel free to adjust the model card template under the HubHelpers class, which is available in both:
