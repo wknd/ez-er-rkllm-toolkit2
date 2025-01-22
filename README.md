@@ -42,24 +42,21 @@ docker build -t $(whoami)/rkllm-interactive . && docker run -it --rm $(whoami)/r
 
 ### GPU _(CUDA)_
 
-your system will need a compatible nvidia card, drivers, and [nvidia-container-toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html) installed.
-
-First check what version of CUDA your system is running with:
-
 ```bash
-nvidia-smi
+cd docker
+docker build -t $(whoami)/rkllm-interactive . && docker run -it --gpus all --rm $(whoami)/rkllm-interactive
 ```
 
-Then look up an appropriate base image on https://hub.docker.com/r/nvidia/cuda/tags with a matching `major.minor` version.
+And when asked in the interactive script, select CUDA.
 
-For this example, my system reports CUDA version `12.4`, and the latest compatible version is `12.4.1`. Based on this I pick image `cuda:12.4.1-devel-ubuntu22.04`
+### Custom base image
+
+The default image may not use the correct cuda version for your system, so you can select a custom (ubuntu based) base image with the `BASE_IMAGE` argument like so:
 
 ```bash
 cd docker
 docker build -t $(whoami)/rkllm-interactive --build-arg BASE_IMAGE=nvidia/cuda:12.4.1-devel-ubuntu22.04 . && docker run -it --gpus all --rm $(whoami)/rkllm-interactive
 ```
-
-The script should detect CUDA is installed inside the container and attempt to use it.
 
 ## Changing the model card template
 

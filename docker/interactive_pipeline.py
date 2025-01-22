@@ -86,7 +86,11 @@ class RKLLMRemotePipeline:
                               ignore=lambda x: not x["platform"] == "rk3576"),
             inquirer.Text("hybrid_rate",
                           message="Block (group-wise quantization) ratio, whose value is between 0 and 1, 0 indicating none",
-                          default="0.0")
+                          default="0.0"),
+            inquirer.List("executor",
+                          message="use cuda or cpu?",
+                          choices=["cuda", "cpu"],
+                          default="cpu")
         ]
         
         self.config = inquirer.prompt(self.inputs)
@@ -98,6 +102,7 @@ class RKLLMRemotePipeline:
         self.qtype = self.config["qtype"]
         self.hybrid_rate = float(self.config["hybrid_rate"])
         self.library_type = self.config["library"]
+        self.executor = self.config["executor"]
         
     def build_vars(self):
         if self.platform == "rk3588":
@@ -106,13 +111,10 @@ class RKLLMRemotePipeline:
             self.npu_cores = 2
         self.dataset = None
         self.qparams = None
-        try:
-            subprocess.check_output('nvidia-smi')
+        if (self.executor == "cuda"):
             self.device = "cuda"
-            print("Using CUDA")
-        except Exception:
+        else:
             self.device = "cpu"
-            print("Using CPU")
         self.model_name = self.model_id.split("/", 1)[1]
         self.model_dir = f"./models/{self.model_name}/"
         self.name_suffix = f"{self.platform}-{self.qtype}-opt-{self.optimization}-hybrid-ratio-{self.hybrid_rate}"
