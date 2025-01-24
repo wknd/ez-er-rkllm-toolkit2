@@ -5,6 +5,7 @@ from pathlib import Path
 import inquirer
 import shutil
 import os
+import subprocess
 
 class RKLLMRemotePipeline:
     def __init__(self, model_id="", lora_id="", platform="rk3588", 
@@ -85,7 +86,11 @@ class RKLLMRemotePipeline:
                               ignore=lambda x: not x["platform"] == "rk3576"),
             inquirer.Text("hybrid_rate",
                           message="Block (group-wise quantization) ratio, whose value is between 0 and 1, 0 indicating none",
-                          default="0.0")
+                          default="0.0"),
+            inquirer.List("executor",
+                          message="use cuda or cpu?",
+                          choices=["cuda", "cpu"],
+                          default="cpu")
         ]
         
         self.config = inquirer.prompt(self.inputs)
@@ -97,6 +102,7 @@ class RKLLMRemotePipeline:
         self.qtype = self.config["qtype"]
         self.hybrid_rate = float(self.config["hybrid_rate"])
         self.library_type = self.config["library"]
+        self.executor = self.config["executor"]
         
     def build_vars(self):
         if self.platform == "rk3588":
@@ -105,7 +111,10 @@ class RKLLMRemotePipeline:
             self.npu_cores = 2
         self.dataset = None
         self.qparams = None
-        self.device = "cpu"
+        if (self.executor == "cuda"):
+            self.device = "cuda"
+        else:
+            self.device = "cpu"
         self.model_name = self.model_id.split("/", 1)[1]
         self.model_dir = f"./models/{self.model_name}/"
         self.name_suffix = f"{self.platform}-{self.qtype}-opt-{self.optimization}-hybrid-ratio-{self.hybrid_rate}"
@@ -267,7 +276,7 @@ class HubHelpers:
             f'[RockhipNPU Reddit](https://reddit.com/r/RockchipNPU) \n\n' + \
             f'[EZRKNN-LLM](https://github.com/Pelochus/ezrknn-llm/) \n\n' + \
             f'Pretty much anything by these folks: [marty1885](https://github.com/marty1885) and [happyme531](https://huggingface.co/happyme531) \n\n' + \
-            f'Converted using https://github.com/c0zaut/ez-er-rkllm-toolkit \n\n' + \
+            f'Converted using https://github.com/heathershaw821/ez-er-rkllm-toolkit2 \n\n' + \
             f'# Original Model Card for base model, {self.model_name}, below:\n\n' + \
             f'{self.card_in.text}'
         try:

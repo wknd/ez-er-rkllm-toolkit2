@@ -1,4 +1,5 @@
-FROM ubuntu:22.04
+ARG BASE_IMAGE=ubuntu:22.04
+FROM $BASE_IMAGE
 
 SHELL ["/bin/bash", "-exo", "pipefail", "-c"]
 
@@ -7,7 +8,7 @@ RUN echo 'APT::Install-Suggests "0";' >> /etc/apt/apt.conf.d/00-docker \
 
 RUN DEBIAN_FRONTEND=noninteractive \
   apt-get update \
-  && apt-get install -y python3 pip python3-tk \
+  && DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get install -y python3 pip python3-tk \
   && rm -rf /var/lib/apt/lists/* \
   && mkdir /root/wheels \
   && mkdir -p /root/toolkit/models

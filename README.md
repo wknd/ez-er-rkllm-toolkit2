@@ -23,7 +23,7 @@ Also performed conversion using an Intel X5650 CPU, which uses DDR3 RAM and does
 
 ## How to use
 
-There are two scripts in here - an interactive, and a non-interactive version. I have also included version 1.1.0 of RKLLM-Toolkit, since it contains all of the dependencies required to run these scripts (except for inquirer.)
+There is only an interactive script included here. I have also included version 1.1.0 of RKLLM-Toolkit, since it contains all of the dependencies required to run these scripts (except for inquirer.)
 
 To get started, clone this repository:
 
@@ -33,17 +33,30 @@ git clone https://github.com/heathershaw821/ez-er-rkllm.git
 
 To do a one-shot conversion in an interactive shell:
 
-**CPU**
+### CPU
+
 ```bash
 cd docker
 docker build -t $(whoami)/rkllm-interactive . && docker run -it --rm $(whoami)/rkllm-interactive
 ```
-**GPU**
+
+### GPU _(CUDA)_
+
 ```bash
 cd docker
 docker build -t $(whoami)/rkllm-interactive . && docker run -it --gpus all --rm $(whoami)/rkllm-interactive
 ```
 
+And when asked in the interactive script, select CUDA.
+
+### Custom base image
+
+The default image may not use the correct cuda version for your system, so you can select a custom (ubuntu based) base image with the `BASE_IMAGE` argument like so:
+
+```bash
+cd docker
+docker build -t $(whoami)/rkllm-interactive --build-arg BASE_IMAGE=nvidia/cuda:12.4.1-devel-ubuntu22.04 . && docker run -it --gpus all --rm $(whoami)/rkllm-interactive
+```
 
 ## Changing the model card template
 
@@ -52,7 +65,7 @@ Of course, feel free to adjust the model card template under the HubHelpers clas
 ```python
     def build_card(self, export_path):
         """
-        Inserts text into the README.md file of the original model, after the model data. 
+        Inserts text into the README.md file of the original model, after the model data.
         Using the HF built-in functions kept omitting the card's model data,
         so gonna do this old school.
         """
@@ -71,6 +84,7 @@ Of course, feel free to adjust the model card template under the HubHelpers clas
             f'[RockhipNPU Reddit](https://reddit.com/r/RockchipNPU) \n\n' + \
             f'[EZRKNN-LLM](https://github.com/Pelochus/ezrknn-llm/) \n\n' + \
             f'Pretty much anything by these folks: [marty1885][https://github.com/marty1885] and [happyme531](https://huggingface.co/happyme531) \n\n' + \
+            f'Converted using https://github.com/heathershaw821/ez-er-rkllm-toolkit2 \n\n' + \
             f'# Original Model Card for base model, {self.model_name}, below:\n\n' + \
             f'{self.card_in.text}'
         try:
@@ -88,11 +102,11 @@ Of course, feel free to adjust the model card template under the HubHelpers clas
 
 ## Utilization
 
-Model conversion utilizes anywhere from 2-4x the size of the original model, which means that you need an equal amount of memory. I compensated for this with swap files of varying size. Since I just leave the process running overnight (I have low upload speeds,) the performance hit from using swap files vs partitions doesn't bother me much. If performance is critical, I would recommend at least 192GB - 512GB of DDR4 RAM with a lot of cores to handle especially large models. For evaluation and chat simulation, a CPU with AVX* support is also recommended.
+Model conversion utilizes anywhere from 2-4x the size of the original model, which means that you need an equal amount of memory. I compensated for this with swap files of varying size. Since I just leave the process running overnight (I have low upload speeds,) the performance hit from using swap files vs partitions doesn't bother me much. If performance is critical, I would recommend at least 192GB - 512GB of DDR4 RAM with a lot of cores to handle especially large models. For evaluation and chat simulation, a CPU with AVX\* support is also recommended.
 
 ## Compatibility and Testing
 
-Models converted using the Python 3.10 and RKLLM v1.1.1 packages do appear to be backwards compatible with the v1.1.0 runtime! So far, only [Llama 3.2 3B Instruct](https://huggingface.co/c01zaut/Llama-3.2-3B-Instruct-rk3588-1.1.1/blob/main/Llama-3.2-3B-Instruct-rk3588-w8a8_g128-opt-0-hybrid-ratio-1.0.rkllm) has been tested. Check out [u/DimensionUnlucky4046](https://www.reddit.com/user/DimensionUnlucky4046/)'s pipeline in this [Reddit thread](https://www.reddit.com/r/RockchipNPU/comments/1gi2web/llama3_for_rk3588_available/) 
+Models converted using the Python 3.10 and RKLLM v1.1.1 packages do appear to be backwards compatible with the v1.1.0 runtime! So far, only [Llama 3.2 3B Instruct](https://huggingface.co/c01zaut/Llama-3.2-3B-Instruct-rk3588-1.1.1/blob/main/Llama-3.2-3B-Instruct-rk3588-w8a8_g128-opt-0-hybrid-ratio-1.0.rkllm) has been tested. Check out [u/DimensionUnlucky4046](https://www.reddit.com/user/DimensionUnlucky4046/)'s pipeline in this [Reddit thread](https://www.reddit.com/r/RockchipNPU/comments/1gi2web/llama3_for_rk3588_available/)
 
 ## To do
 
